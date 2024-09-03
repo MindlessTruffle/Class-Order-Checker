@@ -1,10 +1,10 @@
-const referenceDate = new Date('2024-09-02'); // This reference date is the MONDAY of a schoolweek
+// reference date is the Monday of a known week
+const referenceDate = new Date('2024-09-02');
 const referenceType = 'CD';
 
-// Gotta do these manually
 const breaks = {
   spring: { start: new Date('2024-03-25'), end: new Date('2024-04-01') },
-  summer: { start: new Date('2024-06-25'), end: new Date('2024-09-01') },
+  summer: { start: new Date('2024-06-25'), end: new Date('2024-09-03') },
   winter: { start: new Date('2024-12-20'), end: new Date('2025-01-05') }
 };
 
@@ -76,7 +76,7 @@ function updateBackground(type) {
 
 function isWeekend(date) {
   const day = date.getDay();
-  return (day === 5 || day === 6); // saturday is 6 and sunday is 0
+  return (day === 5 || day === 6); // saturday is 6 and sunday (0)
 }
 
 function isBreak(date) {
