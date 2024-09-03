@@ -1,6 +1,5 @@
-// reference date is the Monday of a known week
-const referenceDate = new Date('2024-09-02');
-const referenceType = 'CD';
+const referenceDate = new Date('2024-09-02'); // monday of a known week
+const referenceType = 'CD'; // what order that week is
 
 const breaks = {
   spring: { start: new Date('2024-03-25'), end: new Date('2024-04-01') },
