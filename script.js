@@ -76,7 +76,7 @@ function updateBackground(type) {
 
 function isWeekend(date) {
   const day = date.getDay();
-  return (day === 6 || day === 0); // saturday is 6 and sunday is 0
+  return (day === 5 || day === 6); // saturday is 6 and sunday is 0
 }
 
 function isBreak(date) {
