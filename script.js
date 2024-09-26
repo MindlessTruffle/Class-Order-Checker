@@ -9,6 +9,7 @@ const breaks = {
 
 document.addEventListener("DOMContentLoaded", function() {
   fillCurrentDate();
+  loadClasses();
   checkWeek();
 
   document.getElementById('dateForm').addEventListener('submit', function(event) {
@@ -32,9 +33,11 @@ function checkWeek() {
   if (isBreak(currentDate)) {
     document.getElementById('cdOrDc').textContent = "Break!";
     updateBackground('break');
+    updateClassDisplay("");
   } else if (isWeekend(currentDate)) {
     document.getElementById('cdOrDc').textContent = "Weekend!";
     updateBackground('weekend');
+    updateClassDisplay("");
   } else {
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
     const diffWeeks = Math.floor((currentDate - referenceDate) / oneWeek);
@@ -44,6 +47,7 @@ function checkWeek() {
 
     document.getElementById('cdOrDc').textContent = `${currentWeekType} Week`;
     updateBackground(currentWeekType);
+    updateClassDisplay(currentWeekType);
   }
 }
 
@@ -75,10 +79,41 @@ function updateBackground(type) {
 
 function isWeekend(date) {
   const day = date.getDay();
-  console.log(day);
-  return (day === 5 || day === 6); // saturday is 6 and sunday (0)
+  return (day === 6 || day === 0); // saturday is 5 and sunday is 6 (idk why lol)
 }
 
 function isBreak(date) {
   return Object.values(breaks).some(breakPeriod => date >= breakPeriod.start && date <= breakPeriod.end);
+}
+
+function saveClasses() {
+  const cClassName = document.getElementById('cClassName').value;
+  const dClassName = document.getElementById('dClassName').value;
+
+  localStorage.setItem('cClassName', cClassName);
+  localStorage.setItem('dClassName', dClassName);
+
+  checkWeek(); // update disp. after saving
+}
+
+function loadClasses() {
+  const savedCClass = localStorage.getItem('cClassName') || "";
+  const savedDClass = localStorage.getItem('dClassName') || "";
+
+  document.getElementById('cClassName').value = savedCClass;
+  document.getElementById('dClassName').value = savedDClass;
+}
+
+function updateClassDisplay(weekType) {
+  const cClassName = localStorage.getItem('cClassName') || "___";
+  const dClassName = localStorage.getItem('dClassName') || "___";
+
+  let classText = "";
+  if (weekType === 'CD') {
+    classText = `First Class: ${cClassName}`;
+  } else if (weekType === 'DC') {
+    classText = `First Class: ${dClassName}`;
+  }
+
+  document.getElementById('classDisplay').textContent = classText;
 }

@@ -35,15 +35,27 @@
           <label for="currentDate">Select Date:</label>
         </div>
 
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="cClassName" placeholder="Enter C Class">
+          <label for="cClassName">C Class (optional):</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="dClassName" placeholder="Enter D Class">
+          <label for="dClassName">D Class (optional):</label>
+        </div>
+
         <div class="d-grid gap-2">
-          <button type="button" onclick="checkWeek()" class="btn btn-primary">Check Week</button>
-          <button type="button" onclick="fillCurrentDate()" class="btn btn-secondary">Use Today's Date</button>
+          <button type="button" onclick="saveClasses()" class="btn btn-success">Save Classes</button>
+          <!-- <button type="button" onclick="checkWeek()" class="btn btn-secondary">Check Week</button> -->
+          <button type="button" onclick="fillCurrentDate()" class="btn btn-primary">Use Today's Date</button>
         </div>
       </form>
     </div>
 
     <div class="container text-center mt-4 p-3 rounded" id="resultContainer">
       <div id="cdOrDc" class="display-2 text-white fw-bolder"></div>
+      <div id="classDisplay" class="display-6 text-white"></div>
     </div>
   </div>
 
