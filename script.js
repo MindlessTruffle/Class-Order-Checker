@@ -1,36 +1,175 @@
+// THE PROGRAM CURRENTLY ONLY ACCOUNTS FOR WEEKLY AND BIWEEKLY CLUB/EVENTS**
+
+// THE PROGRAM'S KNOWLEDGE MAY STOP BEING ACCURATE IN 2025 - UPDATES WILL BE MADE SOON AFTER YEAR SWITCH
+
+// THE PROGRAM DOES NOT INCLUDE INSTRUCTIONAL SUPPORT DAYS - I HAVE YET TO FIND A LIST OF DATES
+
 const referenceDate = new Date('2024-09-02'); // monday of a known week
 const referenceType = 'CD'; // what order that week is
-
 const breaks = {
   spring: { start: new Date('2024-03-25'), end: new Date('2024-04-01') },
   summer: { start: new Date('2024-06-25'), end: new Date('2024-09-03') },
   winter: { start: new Date('2024-12-20'), end: new Date('2025-01-05') }
 };
 
+const specialDays = {
+  pdDays: [
+    '2024-09-03',  // Tuesday, September 3, 2024
+    '2024-10-11',  // Friday, October 11, 2024
+    '2024-11-01',  // Friday, November 1, 2024
+    '2025-01-31',  // Friday, January 31, 2025
+    '2025-03-31',  // Monday, March 31, 2025
+    '2025-06-26',  // Thursday, June 26, 2025
+    '2025-06-27'   // Friday, June 27, 2025
+  ],
+  instructionalSupportDays: [
+    // Not sure of any days yet!
+  ],
+  blendedLearningDays: [
+    '2024-09-25',  // Wednesday, September 25, 2024
+    '2024-12-04',  // Wednesday, December 4, 2024
+    '2025-02-26',  // Wednesday, February 26, 2025
+    '2025-05-07'   // Wednesday, May 7, 2025
+    ],
+  holidayDays: [
+    '2024-09-02',  // Labour Day
+    '2024-10-14',  // Thanksgiving
+    '2024-12-23',  // Winter Break Start
+    '2025-01-03',  // Winter Break End
+    '2025-02-17',  // Family Day
+    '2025-03-10',  // March Break Start
+    '2025-03-14',  // March Break End
+    '2025-04-18',  // Good Friday
+    '2025-04-21',  // Easter Monday
+    '2025-05-19'   // Victoria Day
+    ],
+};
+
+function isSpecialDay(date) {
+  const dateString = date.toISOString().split('T')[0];
+
+  if (specialDays.pdDays.includes(dateString)) {
+    return { isSpecial: true, type: 'PD Day' };
+  }
+  if (specialDays.instructionalSupportDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Instructional Support Day' };
+  }
+  if (specialDays.blendedLearningDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Blended Learning Day' };
+  }
+  if (specialDays.holidayDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Holiday Day' };
+  }
+
+  return { isSpecial: false };
+}
+
+async function loadEvents() {
+  try {
+    const response = await fetch('events.json');
+    const data = await response.json();
+    return data.events;
+  } catch (error) {
+    console.error('Error loading events:', error);
+    return [];
+  }
+}
+
+function getEventFrequency(dates) {
+  const date1 = new Date(dates[0]);
+  const date2 = new Date(dates[1]);
+  const weeksBetween = Math.round(Math.abs(date2 - date1) / (7 * 24 * 60 * 60 * 1000));
+  return weeksBetween === 1 ? 'weekly' : 'biweekly';
+}
+
+function shouldShowEvent(event, currentDate) {
+  const date1 = new Date(event.referenceDates[0]);
+  const dayOfWeek = date1.getDay();
+
+  if (currentDate.getDay() !== dayOfWeek) {
+    return false;
+  }
+
+  const frequency = getEventFrequency(event.referenceDates);
+  if (frequency === 'weekly') {
+    return true;
+  }
+
+  const weeksSinceRef = Math.floor((currentDate - date1) / (7 * 24 * 60 * 60 * 1000));
+  return weeksSinceRef % 2 === 0;
+}
+
+async function updateSidebar() {
+  const events = await loadEvents();
+  const currentDate = new Date(document.getElementById('currentDate').value);
+
+  const types = {
+    'before': 'Before School',
+    'during': 'During School',
+    'after': 'After School'
+  };
+
+  Object.entries(types).forEach(([type, title]) => {
+    const container = document.getElementById(`${type}SchoolEvents`);
+    if (!container) return;
+
+    const relevantEvents = events
+      .filter(event => event.type === type && shouldShowEvent(event, currentDate))
+      .map(event => `
+        <div class="card mb-2">
+          <h3 class="h6">${title}</h3>
+          <ul class="list-unstyled">
+            <li>
+              ${event.link ? 
+                `<a href="${event.link}" class="fw-bold text-primary">${event.name}</a>` : 
+                `<span class="fw-bold">${event.name}</span>`
+              }
+              <p class="text-muted mb-1">${event.location} - ${event.teacher}</p>
+              <small class="text-muted">${event.time}</small>
+            </li>
+          </ul>
+        </div>
+      `).join('');
+
+    container.innerHTML = relevantEvents || `
+      <div class="card mb-2">
+        <h3 class="h6">${title}</h3>
+        <ul class="list-unstyled">
+          <li class="text-muted">No events scheduled</li>
+        </ul>
+      </div>
+    `;
+  });
+}
+
+// loader functions
 document.addEventListener("DOMContentLoaded", function() {
   fillCurrentDate();
   loadClasses();
   checkWeek();
+  updateSidebar();
 
   document.getElementById('dateForm').addEventListener('submit', function(event) {
     event.preventDefault();
     checkWeek();
+    updateSidebar();
   });
 
-  document.getElementById('currentDate').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      checkWeek();
-    }
+  document.getElementById('currentDate').addEventListener('change', function() {
+    checkWeek();
+    updateSidebar();
   });
-
-  document.getElementById('currentDate').addEventListener('change', checkWeek);
 });
 
 function checkWeek() {
   const currentDate = new Date(document.getElementById('currentDate').value);
+  const specialDay = isSpecialDay(currentDate);
 
-  if (isBreak(currentDate)) {
+  if (specialDay.isSpecial) {
+    document.getElementById('cdOrDc').textContent = specialDay.type;
+    updateBackground('special');
+    updateClassDisplay("");
+  } else if (isBreak(currentDate)) {
     document.getElementById('cdOrDc').textContent = "Break!";
     updateBackground('break');
     updateClassDisplay("");
@@ -41,10 +180,8 @@ function checkWeek() {
   } else {
     const oneWeek = 7 * 24 * 60 * 60 * 1000;
     const diffWeeks = Math.floor((currentDate - referenceDate) / oneWeek);
-
     const isEvenWeek = diffWeeks % 2 === 0;
     const currentWeekType = isEvenWeek ? referenceType : (referenceType === 'CD' ? 'DC' : 'CD');
-
     document.getElementById('cdOrDc').textContent = `${currentWeekType} Week`;
     updateBackground(currentWeekType);
     updateClassDisplay(currentWeekType);
@@ -60,7 +197,6 @@ function fillCurrentDate() {
 
 function updateBackground(type) {
   const resultContainer = document.getElementById('resultContainer');
-
   switch(type) {
     case 'CD':
       resultContainer.className = 'container text-center mt-4 p-3 rounded bg-primary text-white';
@@ -74,12 +210,16 @@ function updateBackground(type) {
     case 'break':
       resultContainer.className = 'container text-center mt-4 p-3 rounded bg-success text-white';
       break;
+    case 'special':
+      resultContainer.className = 'container text-center mt-4 p-3 rounded text-dark';
+      resultContainer.style.backgroundColor = '#fd7e14';  // override w orange color
+      break;
   }
 }
 
 function isWeekend(date) {
   const day = date.getDay();
-  return (day === 6 || day === 5); // saturday is 5 and sunday is 6 (idk why lol)
+  return (day === 6 || day === 5); // saturday is 5 and sunday is 6 ionno why
 }
 
 function isBreak(date) {
@@ -89,17 +229,14 @@ function isBreak(date) {
 function saveClasses() {
   const cClassName = document.getElementById('cClassName').value;
   const dClassName = document.getElementById('dClassName').value;
-
   localStorage.setItem('cClassName', cClassName);
   localStorage.setItem('dClassName', dClassName);
-
-  checkWeek(); // update disp. after saving
+  checkWeek();
 }
 
 function loadClasses() {
   const savedCClass = localStorage.getItem('cClassName') || "";
   const savedDClass = localStorage.getItem('dClassName') || "";
-
   document.getElementById('cClassName').value = savedCClass;
   document.getElementById('dClassName').value = savedDClass;
 }
@@ -107,13 +244,11 @@ function loadClasses() {
 function updateClassDisplay(weekType) {
   const cClassName = localStorage.getItem('cClassName') || "___";
   const dClassName = localStorage.getItem('dClassName') || "___";
-
   let classText = "";
   if (weekType === 'CD') {
     classText = `First Class: ${cClassName}`;
   } else if (weekType === 'DC') {
     classText = `First Class: ${dClassName}`;
   }
-
   document.getElementById('classDisplay').textContent = classText;
 }

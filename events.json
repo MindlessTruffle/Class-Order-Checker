@@ -1,0 +1,13 @@
+{
+  "events": [
+    {
+      "name": "CS Club",
+      "type": "after",
+      "location": "Room 1705 & Room 1605",
+      "teacher": "Mr. Chard",
+      "time": "2:30 PM - 3:30 PM",
+      "link": "https://classroom.google.com/c/NDQ2NDUyMDgzMzBa?cjc=yt7yrov",
+      "referenceDates": ["2024-11-12", "2024-11-19"]
+    }
+  ]
+}
