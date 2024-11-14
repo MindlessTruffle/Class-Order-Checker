@@ -83,7 +83,13 @@ async function loadEvents() {
 // }
 
 function shouldShowEvent(event, currentDate) {
-  const referenceDate = new Date(event.referenceDate); // Monday of a known week
+  // Ensure we're working with date objects
+  const referenceDate = new Date(event.referenceDate);
+  currentDate = new Date(currentDate);
+
+  // Get the day name in a timezone-safe way
+  // Set hours to noon to avoid any timezone edge cases
+  currentDate.setHours(12, 0, 0, 0);
   const dayOfWeek = currentDate.toLocaleString('en-US', { weekday: 'long' });
 
   // Check if the current day is one of the event's days
@@ -93,7 +99,17 @@ function shouldShowEvent(event, currentDate) {
 
   // Check event frequency
   const oneWeekInMs = 7 * 24 * 60 * 60 * 1000;
-  const weeksSinceReference = Math.floor((currentDate - referenceDate) / oneWeekInMs);
+
+  // Normalize both dates to start of day for consistent week calculations
+  const normalizedCurrentDate = new Date(currentDate);
+  normalizedCurrentDate.setHours(0, 0, 0, 0);
+
+  const normalizedReferenceDate = new Date(referenceDate);
+  normalizedReferenceDate.setHours(0, 0, 0, 0);
+
+  const weeksSinceReference = Math.floor(
+    (normalizedCurrentDate - normalizedReferenceDate) / oneWeekInMs
+  );
 
   if (event.frequency === 'weekly') {
     return true;  // Always show weekly events
@@ -158,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function checkWeek() {
-  const currentDate = new Date(document.getElementById('currentDate').value + "T00:00:00");  // Use midnight local time
+  const currentDate = new Date(document.getElementById('currentDate').value);
   const specialDay = isSpecialDay(currentDate);
 
   if (specialDay.isSpecial) {
