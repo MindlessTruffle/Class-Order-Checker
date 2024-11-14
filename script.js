@@ -83,20 +83,24 @@ function getEventFrequency(dates) {
 }
 
 function shouldShowEvent(event, currentDate) {
-  const date1 = new Date(event.referenceDates[0]);
-  const dayOfWeek = date1.getDay();
+  const referenceDate = new Date(event.referenceDate); // Monday of a known week
+  const dayOfWeek = currentDate.toLocaleString('en-US', { weekday: 'long' });
 
-  if (currentDate.getDay() !== dayOfWeek) {
+  // Check if the current day is one of the event's days
+  if (!event.daysOfWeek.includes(dayOfWeek)) {
     return false;
   }
 
-  const frequency = getEventFrequency(event.referenceDates);
-  if (frequency === 'weekly') {
-    return true;
+  // Check event frequency
+  const oneWeekInMs = 7 * 24 * 60 * 60 * 1000;
+  const weeksSinceReference = Math.floor((currentDate - referenceDate) / oneWeekInMs);
+
+  if (event.frequency === 'weekly') {
+    return true;  // Always show weekly events
   }
 
-  const weeksSinceRef = Math.floor((currentDate - date1) / (7 * 24 * 60 * 60 * 1000));
-  return weeksSinceRef % 2 === 0;
+  // For biweekly events, show only if it's an even week relative to the reference date
+  return weeksSinceReference % 2 === 0;
 }
 
 async function updateSidebar() {
@@ -238,9 +242,9 @@ function updateClassDisplay(weekType) {
   const dClassName = localStorage.getItem('dClassName') || "___";
   let classText = "";
   if (weekType === 'CD') {
-    classText = `First Class: ${cClassName}`;
+    classText = `After Break: ${cClassName}`;
   } else if (weekType === 'DC') {
-    classText = `First Class: ${dClassName}`;
+    classText = `After Break: ${dClassName}`;
   }
   document.getElementById('classDisplay').textContent = classText;
 }
