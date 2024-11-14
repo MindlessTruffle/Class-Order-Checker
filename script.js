@@ -75,12 +75,12 @@ async function loadEvents() {
   }
 }
 
-function getEventFrequency(dates) {
-  const date1 = new Date(dates[0]);
-  const date2 = new Date(dates[1]);
-  const weeksBetween = Math.round(Math.abs(date2 - date1) / (7 * 24 * 60 * 60 * 1000));
-  return weeksBetween === 1 ? 'weekly' : 'biweekly';
-}
+// function getEventFrequency(dates) {
+//   const date1 = new Date(dates[0]);
+//   const date2 = new Date(dates[1]);
+//   const weeksBetween = Math.round(Math.abs(date2 - date1) / (7 * 24 * 60 * 60 * 1000));
+//   return weeksBetween === 1 ? 'weekly' : 'biweekly';
+// }
 
 function shouldShowEvent(event, currentDate) {
   const referenceDate = new Date(event.referenceDate); // Monday of a known week
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function checkWeek() {
-  const currentDate = new Date(document.getElementById('currentDate').value);
+  const currentDate = new Date(document.getElementById('currentDate').value + "T00:00:00");  // Use midnight local time
   const specialDay = isSpecialDay(currentDate);
 
   if (specialDay.isSpecial) {
