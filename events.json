@@ -1,13 +1,31 @@
 {
   "events": [
     {
-      "name": "CS Club",
+      "name": "Computer Science Club",
       "type": "after",
       "location": "Room 1705 & Room 1605",
       "teacher": "Mr. Chard",
       "time": "2:30 PM - 3:30 PM",
       "link": "https://classroom.google.com/c/NDQ2NDUyMDgzMzBa?cjc=yt7yrov",
       "referenceDates": ["2024-11-12", "2024-11-19"]
+    },
+    {
+      "name": "Electric Vehicle club",
+      "type": "after",
+      "location": "Machine Shop",
+      "teacher": "Mr. Henderson",
+      "time": "2:30 PM - 4:00 PM",
+      "link": "",
+      "referenceDates": ["2024-11-14", "2024-11-21"]
+    },
+    {
+      "name": "Junior Jazz Band Practice",
+      "type": "during",
+      "location": "Music Room",
+      "teacher": "Mr. Bruzzese",
+      "time": "11:00 AM - 11:50 AM",
+      "link": "",
+      "referenceDates": ["2024-11-14", "2024-11-21"]
     }
   ]
 }
