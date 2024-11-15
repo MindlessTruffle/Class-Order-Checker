@@ -55,35 +55,29 @@ async function updateSidebar() {
   };
 
   Object.entries(types).forEach(([type, title]) => {
-    const container = document.getElementById(`${type}SchoolEvents`);
-    if (!container) return;
+    const eventsList = document.getElementById(`${type}SchoolEventsList`);
+    if (!eventsList) return;
 
-    const relevantEvents = events
-      .filter(event => event.type === type && shouldShowEvent(event, currentDate))
-      .map(event => `
-        <div class="card mb-2">
-          <h3 class="h6">${title}</h3>
-          <ul class="list-unstyled">
-            <li>
-              ${event.link ? 
-                `<a href="${event.link}" class="fw-bold text-primary">${event.name}</a>` : 
-                `<span class="fw-bold">${event.name}</span>`
-              }
-              <p class="text-muted mb-1">${event.location} - ${event.teacher}</p>
-              <small class="text-muted">${event.time}</small>
-            </li>
-          </ul>
-        </div>
+    // Filter relevant events
+    const relevantEvents = events.filter(event => 
+      event.type === type && shouldShowEvent(event, currentDate)
+    );
+
+    // Update only the events list content
+    if (relevantEvents.length > 0) {
+      eventsList.innerHTML = relevantEvents.map(event => `
+        <li>
+          ${event.link ? 
+            `<a href="${event.link}" class="fw-bold text-primary">${event.name}</a>` : 
+            `<span class="fw-bold">${event.name}</span>`
+          }
+          <p class="text-muted mb-1">${event.location} - ${event.teacher}</p>
+          <small class="text-muted">${event.time}</small>
+        </li>
       `).join('');
-
-    container.innerHTML = relevantEvents || `
-      <div class="card mb-2">
-        <h3 class="h6">${title}</h3>
-        <ul class="list-unstyled">
-          <li class="text-muted">No events scheduled</li>
-        </ul>
-      </div>
-    `;
+    } else {
+      eventsList.innerHTML = `<li class="text-muted">No events scheduled</li>`;
+    }
   });
 }
 
