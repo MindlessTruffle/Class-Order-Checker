@@ -1,3 +1,9 @@
+// THE PROGRAM CURRENTLY ONLY ACCOUNTS FOR WEEKLY AND BIWEEKLY CLUB/EVENTS**
+
+// THE PROGRAM'S KNOWLEDGE MAY STOP BEING ACCURATE IN 2025 - UPDATES WILL BE MADE SOON AFTER YEAR SWITCH
+
+// THE PROGRAM DOES NOT INCLUDE INSTRUCTIONAL SUPPORT DAYS - I HAVE YET TO FIND A LIST OF DATES
+
 const referenceDate = new Date('2024-09-02'); // monday of a known week
 const referenceType = 'CD'; // what order that week is
 const breaks = {
@@ -6,7 +12,58 @@ const breaks = {
   winter: { start: new Date('2024-12-20'), end: new Date('2025-01-05') }
 };
 
-// Events handling functions
+const specialDays = {
+  pdDays: [
+    '2024-09-03',  // Tuesday, September 3, 2024
+    '2024-10-11',  // Friday, October 11, 2024
+    '2024-11-01',  // Friday, November 1, 2024
+    '2025-01-31',  // Friday, January 31, 2025
+    '2025-03-31',  // Monday, March 31, 2025
+    '2025-06-26',  // Thursday, June 26, 2025
+    '2025-06-27'   // Friday, June 27, 2025
+  ],
+  instructionalSupportDays: [
+    // Not sure of any days yet!
+  ],
+  blendedLearningDays: [
+    '2024-09-25',  // Wednesday, September 25, 2024
+    '2024-12-04',  // Wednesday, December 4, 2024
+    '2025-02-26',  // Wednesday, February 26, 2025
+    '2025-05-07'   // Wednesday, May 7, 2025
+    ],
+  holidayDays: [
+    '2024-09-02',  // Labour Day
+    '2024-10-14',  // Thanksgiving
+    '2024-12-23',  // Winter Break Start
+    '2025-01-03',  // Winter Break End
+    '2025-02-17',  // Family Day
+    '2025-03-10',  // March Break Start
+    '2025-03-14',  // March Break End
+    '2025-04-18',  // Good Friday
+    '2025-04-21',  // Easter Monday
+    '2025-05-19'   // Victoria Day
+    ],
+};
+
+function isSpecialDay(date) {
+  const dateString = date.toISOString().split('T')[0];
+
+  if (specialDays.pdDays.includes(dateString)) {
+    return { isSpecial: true, type: 'PD Day' };
+  }
+  if (specialDays.instructionalSupportDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Instructional Support Day' };
+  }
+  if (specialDays.blendedLearningDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Blended Learning Day' };
+  }
+  if (specialDays.holidayDays.includes(dateString)) {
+    return { isSpecial: true, type: 'Holiday Day' };
+  }
+
+  return { isSpecial: false };
+}
+
 async function loadEvents() {
   try {
     const response = await fetch('events.json');
@@ -18,30 +75,49 @@ async function loadEvents() {
   }
 }
 
-function getEventFrequency(dates) {
-  const date1 = new Date(dates[0]);
-  const date2 = new Date(dates[1]);
-  const weeksBetween = Math.round(Math.abs(date2 - date1) / (7 * 24 * 60 * 60 * 1000));
-  return weeksBetween === 1 ? 'weekly' : 'biweekly';
-}
-
 function shouldShowEvent(event, currentDate) {
-  const date1 = new Date(event.referenceDates[0]);
-  const dayOfWeek = date1.getDay();
+  const daysToNumber = {
+    "Sunday": 6,
+    "Monday": 0,
+    "Tuesday": 1,
+    "Wednesday": 2,
+    "Thursday": 3,
+    "Friday": 4,
+    "Saturday": 5
+  };
+  const currentDayNumber = currentDate.getDay();
 
-  // Check if it's the same day of the week
-  if (currentDate.getDay() !== dayOfWeek) {
+  const eventDayNumber = daysToNumber[event.day];
+
+  if (currentDayNumber !== eventDayNumber) {
     return false;
   }
 
-  const frequency = getEventFrequency(event.referenceDates);
+  const frequency = event.frequency;
   if (frequency === 'weekly') {
     return true;
   }
 
-  // For biweekly events, check if we're on the correct week
-  const weeksSinceRef = Math.floor((currentDate - date1) / (7 * 24 * 60 * 60 * 1000));
-  return weeksSinceRef % 2 === 0;
+  const referenceDate = new Date(event.referenceWeekMonday);
+  const weeksSinceRef = Math.floor((currentDate - referenceDate) / (7 * 24 * 60 * 60 * 1000));
+
+  switch(frequency) {
+    case 'biweekly':
+      return weeksSinceRef % 2 === 0;
+    case 'triweekly':
+      return weeksSinceRef % 3 === 0;
+    case 'monthly':
+      // get the week number within the month (0-4)
+      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const weekInMonth = Math.floor((currentDate.getDate() - firstDayOfMonth.getDate()) / 7);
+      // get the reference week number
+      const refFirstDayOfMonth = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1);
+      const refWeekInMonth = Math.floor((referenceDate.getDate() - refFirstDayOfMonth.getDate()) / 7);
+      // show event if it's the same week number as reference date
+      return weekInMonth === refWeekInMonth;
+    default:
+      return false;
+  }
 }
 
 async function updateSidebar() {
@@ -58,12 +134,10 @@ async function updateSidebar() {
     const eventsList = document.getElementById(`${type}SchoolEventsList`);
     if (!eventsList) return;
 
-    // Filter relevant events
     const relevantEvents = events.filter(event => 
       event.type === type && shouldShowEvent(event, currentDate)
     );
 
-    // Update only the events list content
     if (relevantEvents.length > 0) {
       eventsList.innerHTML = relevantEvents.map(event => `
         <li>
@@ -81,7 +155,7 @@ async function updateSidebar() {
   });
 }
 
-// Original functions
+// loader functions
 document.addEventListener("DOMContentLoaded", function() {
   fillCurrentDate();
   loadClasses();
@@ -102,7 +176,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function checkWeek() {
   const currentDate = new Date(document.getElementById('currentDate').value);
-  if (isBreak(currentDate)) {
+  const specialDay = isSpecialDay(currentDate);
+
+  if (specialDay.isSpecial) {
+    document.getElementById('cdOrDc').textContent = specialDay.type;
+    updateBackground('special');
+    updateClassDisplay("");
+  } else if (isBreak(currentDate)) {
     document.getElementById('cdOrDc').textContent = "Break!";
     updateBackground('break');
     updateClassDisplay("");
@@ -143,12 +223,16 @@ function updateBackground(type) {
     case 'break':
       resultContainer.className = 'container text-center mt-4 p-3 rounded bg-success text-white';
       break;
+    case 'special':
+      resultContainer.className = 'container text-center mt-4 p-3 rounded text-dark';
+      resultContainer.style.backgroundColor = '#fd7e14';  // override w orange color
+      break;
   }
 }
 
 function isWeekend(date) {
   const day = date.getDay();
-  return (day === 6 || day === 5); // saturday is 5 and sunday is 6
+  return (day === 6 || day === 5); // saturday is 5 and sunday is 6 ionno why
 }
 
 function isBreak(date) {
