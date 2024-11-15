@@ -1,6 +1,17 @@
 {
   "events": [
     {
+      "name": "Business Club",
+      "type": "during",
+      "location": "Room 1704",
+      "teacher": "Mr. Brown",
+      "time": "10:55 AM - 11:55 AM",
+      "link": "https://classroom.google.com/c/NzExMjM5OTMyOTc4?cjc=avvaqcl",
+      "day": "Thursday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
       "name": "CS Club",
       "type": "after",
       "location": "Room 1705 & Room 1605",
@@ -8,6 +19,39 @@
       "time": "2:30 PM - 3:30 PM",
       "link": "https://classroom.google.com/c/NDQ2NDUyMDgzMzBa?cjc=yt7yrov",
       "day": "Tuesday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Christian Faith Group",
+      "type": "during",
+      "location": "Room 3702",
+      "teacher": "Ms. Sword",
+      "time": "10:55 AM - 11:55 AM",
+      "link": "https://classroom.google.com/c/MzIxMDI3Mzk1MjQ4/?cjc=2645tnj",
+      "day": "Friday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Electric Vehicle club",
+      "type": "after",
+      "location": "Machine Shop",
+      "teacher": "Mr. Henderson",
+      "time": "2:30 PM - 4:00 PM",
+      "link": "",
+      "day": "Thursday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Junior Jazz Band Practice",
+      "type": "during",
+      "location": "Music Room",
+      "teacher": "Mr. Bruzzese",
+      "time": "11:00 AM - 11:50 AM",
+      "link": "",
+      "day": "Thursday",
       "frequency": "weekly",
       "referenceWeekMonday": "2024-11-11"
     }
