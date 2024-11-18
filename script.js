@@ -142,7 +142,7 @@ async function updateSidebar() {
       eventsList.innerHTML = relevantEvents.map(event => `
         <li>
           ${event.link ? 
-            `<a href="${event.link}" class="fw-bold text-primary">${event.name}</a>` : 
+            `<a target="_blank" href="${event.link}" class="fw-bold text-primary">${event.name}</a>` : 
             `<span class="fw-bold">${event.name}</span>`
           }
           <p class="text-muted mb-1">${event.location} - ${event.teacher}</p>
