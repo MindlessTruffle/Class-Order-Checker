@@ -12,7 +12,7 @@
       "referenceWeekMonday": "2024-11-11"
     },
     {
-      "name": "CS Club",
+      "name": "CS (Computer Science) Club",
       "type": "after",
       "location": "Room 1705 & Room 1605",
       "teacher": "Mr. Chard",
@@ -28,7 +28,7 @@
       "location": "Room 3702",
       "teacher": "Ms. Sword",
       "time": "10:55 AM - 11:55 AM",
-      "link": "https://classroom.google.com/c/MzIxMDI3Mzk1MjQ4/?cjc=2645tnj",
+      "link": "https://classroom.google.com/c/MzIxMDI3Mzk1MjQ4?cjc=2645tnj",
       "day": "Friday",
       "frequency": "weekly",
       "referenceWeekMonday": "2024-11-11"
@@ -54,6 +54,50 @@
       "day": "Thursday",
       "frequency": "weekly",
       "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Best Buddies!",
+      "type": "during",
+      "location": "Room 1602 or Assigned Rooms",
+      "teacher": "Ms. Kocher",
+      "time": "11:00 AM - 11:50 AM",
+      "link": "https://classroom.google.com/c/NzA1NDM5NjE2NjU3?cjc=eroymoj",
+      "day": "Tuesday",
+      "frequency": "biweekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Black Student Union (BSU)",
+      "type": "during",
+      "location": "Room 1602",
+      "teacher": "Ms. Li",
+      "time": "11:00 AM - 11:50 AM",
+      "link": "https://classroom.google.com/c/NzA1NDM5NjE2NjU3?cjc=eroymoj",
+      "day": "Thursday",
+      "frequency": "biweekly",
+      "referenceWeekMonday": "2024-11-11"
+    },
+    {
+      "name": "Bollywood Dance Team - Routine Practice",
+      "type": "after",
+      "location": "Room 1007",
+      "teacher": "Ms. Gingrich",
+      "time": "2:30 PM",
+      "link": "https://classroom.google.com/c/NzA1MjMxNzU1NDc2?cjc=v2axqqq",
+      "day": "Monday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-9-30"
+    },
+    {
+      "name": "Bollywood Dance Team - Routine Practice",
+      "type": "after",
+      "location": "Room 1007",
+      "teacher": "Ms. Gingrich",
+      "time": "2:30 PM",
+      "link": "https://classroom.google.com/c/NzA1MjMxNzU1NDc2?cjc=v2axqqq",
+      "day": "Wednesday",
+      "frequency": "weekly",
+      "referenceWeekMonday": "2024-9-30"
     }
   ]
 }
