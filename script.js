@@ -6,7 +6,7 @@ const referenceDate = new Date('2024-09-02'); // monday of a known week
 const referenceType = 'CD'; // what order that week is
 const breaks = {
   spring: { start: new Date('2024-03-08'), end: new Date('2024-03-14') },
-  summer: { start: new Date('2024-06-25'), end: new Date('2024-09-03') },
+  summer: { start: new Date('2024-06-28'), end: new Date('2024-09-03') },
   winter: { start: new Date('2024-12-21'), end: new Date('2025-01-03') }
 };
 
@@ -26,6 +26,10 @@ const specialDays = {
     '2025-01-28',
     '2025-01-29',
     '2025-01-30',
+    '2025-06-20',
+    '2025-06-23',
+    '2025-06-24',
+    '2025-06-25'
   ],
   blendedLearningDays: [
     '2024-09-25',  // Wednesday, September 25, 2024
