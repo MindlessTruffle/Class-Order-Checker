@@ -1,15 +1,13 @@
-// THE PROGRAM CURRENTLY ONLY ACCOUNTS FOR WEEKLY AND BIWEEKLY CLUB/EVENTS**
+// PATCH WILL BE MADE SOON AFTER YEAR SWITCH
 
-// THE PROGRAM'S KNOWLEDGE MAY STOP BEING ACCURATE IN 2025 - UPDATES WILL BE MADE SOON AFTER YEAR SWITCH
-
-// THE PROGRAM DOES NOT INCLUDE INSTRUCTIONAL SUPPORT DAYS - I HAVE YET TO FIND A LIST OF DATES
+// THE PROGRAM DOES NOT INCLUDE 2025's INSTRUCTIONAL SUPPORT DAYS
 
 const referenceDate = new Date('2024-09-02'); // monday of a known week
 const referenceType = 'CD'; // what order that week is
 const breaks = {
-  spring: { start: new Date('2024-03-25'), end: new Date('2024-04-01') },
+  spring: { start: new Date('2024-03-08'), end: new Date('2024-03-14') },
   summer: { start: new Date('2024-06-25'), end: new Date('2024-09-03') },
-  winter: { start: new Date('2024-12-20'), end: new Date('2025-01-05') }
+  winter: { start: new Date('2024-12-21'), end: new Date('2025-01-03') }
 };
 
 const specialDays = {
@@ -23,7 +21,11 @@ const specialDays = {
     '2025-06-27'   // Friday, June 27, 2025
   ],
   instructionalSupportDays: [
-    // Not sure of any days yet!
+    '2024-11-8',
+    '2025-01-27',
+    '2025-01-28',
+    '2025-01-29',
+    '2025-01-30',
   ],
   blendedLearningDays: [
     '2024-09-25',  // Wednesday, September 25, 2024
@@ -52,7 +54,7 @@ function isSpecialDay(date) {
     return { isSpecial: true, type: 'PD Day' };
   }
   if (specialDays.instructionalSupportDays.includes(dateString)) {
-    return { isSpecial: true, type: 'Instructional Support Day' };
+    return { isSpecial: true, type: 'Instructional Support Day / Exam Day' };
   }
   if (specialDays.blendedLearningDays.includes(dateString)) {
     return { isSpecial: true, type: 'Blended Learning Day' };
