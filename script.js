@@ -238,7 +238,7 @@ function updateBackground(type) {
 }
 
 function isWeekend(date) {
-  const day = date.getDay();
+  const day = new Date(document.getElementById('currentDate').value);
   return (day === 6 || day === 5); // saturday is 5 and sunday is 6 ionno why
 }
 
@@ -271,4 +271,33 @@ function updateClassDisplay(weekType) {
     classText = `First Class: ${dClassName}`;
   }
   document.getElementById('classDisplay').textContent = classText;
+
+  updateUpcomingEvents();
+}
+
+function updateUpcomingEvents() {
+  const upcomingEventsDiv = document.getElementById('upcomingEvent');
+  const today = new Date();
+  let upcomingText = "No special days for the next week.";
+  
+  upcomingEventsDiv.textContent = upcomingText
+
+  let specialDayFound = false;
+
+  for (let i = 2; i <= 6; i++) {
+    const checkDate = new Date(today);
+    checkDate.setDate(today.getDate() + i);
+
+    const specialDay = isSpecialDay(checkDate);
+    if (specialDay.isSpecial) {
+      const dayOfWeek = checkDate.toLocaleDateString('en-US', { weekday: 'long' });
+      upcomingText = `Upcoming ${specialDay.type} on ${dayOfWeek}, ${checkDate.toLocaleDateString('en-US')}.`;
+      specialDayFound = true;
+      break;
+    }
+  }
+
+  if (specialDayFound) {
+    upcomingEventsDiv.textContent = upcomingText;
+  }
 }
