@@ -98,6 +98,17 @@
       "day": "Wednesday",
       "frequency": "weekly",
       "referenceWeekMonday": "2024-9-30"
-    }
+    },
+    {
+    "name": "Typing club",
+    "type": "during lunch",
+    "location": "1703",
+    "teacher": "Mr. Faler",
+    "time": "10:55am - 11:55am",
+    "link": "https://classroom.google.com/c/NzE2MTE2NjE0OTM0?cjc=6rhkvxq",
+    "day": "Monday",
+    "frequency": "biweekly",
+    "referenceWeekMonday": "2024-12-16"
+  }
   ]
 }
