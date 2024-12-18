@@ -109,6 +109,28 @@
       "day": "Monday",
       "frequency": "biweekly",
       "referenceWeekMonday": "2024-12-16"
+    },
+    {
+    "name": "Junior Concert Band",
+    "type": "during",
+    "location": "1105",
+    "teacher": "M. Bruzzese",
+    "time": "10:55 AM - 11:55 AM",
+    "link": "",
+    "day": "Tuesday",
+    "frequency": "weekly",
+    "referenceWeekMonday": "2024-12-02"
+    },
+    {
+    "name": "Chess Club",
+    "type": "during",
+    "location": "1705",
+    "teacher": "Mr Waters",
+    "time": "11:00AM - 11:50AM",
+    "link": "https://classroom.google.com/c/NTAxMjI0MTg0ODEz?cjc=e3jwj6f",
+    "day": "Wednesday",
+    "frequency": "weekly",
+    "referenceWeekMonday": "2024-12-03"
     }
   ]
 }
