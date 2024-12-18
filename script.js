@@ -1,7 +1,5 @@
 // PATCH WILL BE MADE SOON AFTER YEAR SWITCH
 
-// THE PROGRAM DOES NOT INCLUDE 2025's INSTRUCTIONAL SUPPORT DAYS
-
 const referenceDate = new Date('2024-09-02'); // monday of a known week
 const referenceType = 'CD'; // what order that week is
 const breaks = {
@@ -238,7 +236,7 @@ function updateBackground(type) {
 }
 
 function isWeekend(date) {
-  const day = new Date(document.getElementById('currentDate').value);
+  const day = new Date(date);
   return (day === 6 || day === 5); // saturday is 5 and sunday is 6 ionno why
 }
 
@@ -277,21 +275,26 @@ function updateClassDisplay(weekType) {
 
 function updateUpcomingEvents() {
   const upcomingEventsDiv = document.getElementById('upcomingEvent');
-  const today = new Date();
+  const selectedDate = document.getElementById('currentDate').value; // use the input to get the day
+  const today = new Date(selectedDate); // use the selected date as the starting point, NOT the current day*
+
   let upcomingText = "No special days for the next week.";
-  
-  upcomingEventsDiv.textContent = upcomingText
+  upcomingEventsDiv.textContent = upcomingText;
 
   let specialDayFound = false;
 
-  for (let i = 2; i <= 6; i++) {
+  for (let i = 1; i <= 6; i++) {
     const checkDate = new Date(today);
-    checkDate.setDate(today.getDate() + i);
+    checkDate.setDate(today.getDate() + i); // retrieve next days
 
-    const specialDay = isSpecialDay(checkDate);
+    // treat without timezone shift
+    const adjustedDate = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+
+    const specialDay = isSpecialDay(adjustedDate);
     if (specialDay.isSpecial) {
-      const dayOfWeek = checkDate.toLocaleDateString('en-US', { weekday: 'long' });
-      upcomingText = `Upcoming ${specialDay.type} on ${dayOfWeek}, ${checkDate.toLocaleDateString('en-US')}.`;
+      const dayOfWeek = adjustedDate.toLocaleDateString('en-US', { weekday: 'long' });
+      const formattedDate = adjustedDate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      upcomingText = `Upcoming ${specialDay.type} on ${dayOfWeek}, ${formattedDate}.`;
       specialDayFound = true;
       break;
     }
@@ -301,3 +304,4 @@ function updateUpcomingEvents() {
     upcomingEventsDiv.textContent = upcomingText;
   }
 }
+
