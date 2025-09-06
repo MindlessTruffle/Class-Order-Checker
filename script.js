@@ -31,10 +31,6 @@ const specialDays = {
     '2025-06-25'
   ],
   blendedLearningDays: [
-    '2024-09-25',  // Wednesday, September 25, 2024
-    '2024-12-04',  // Wednesday, December 4, 2024
-    '2025-02-26',  // Wednesday, February 26, 2025
-    '2025-05-07'   // Wednesday, May 7, 2025
     ],
   holidayDays: [
     '2024-09-02',  // Labour Day
