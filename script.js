@@ -1,7 +1,7 @@
 // PATCH WILL BE MADE SOON AFTER YEAR SWITCH
 
 const referenceDate = new Date('2024-09-09'); // monday of a known week
-const referenceType = 'CD'; // what order that week is
+const referenceType = 'DC'; // what order that week is
 const breaks = {
   spring: { start: new Date('2024-03-08'), end: new Date('2024-03-14') },
   summer: { start: new Date('2024-06-28'), end: new Date('2024-09-03') },
